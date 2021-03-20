@@ -7,7 +7,7 @@ public class OrderData {
 
     private String currency;
     private String method;
-    private String intent;
+    private PaypalPaymentIntent intent;
     private String description;
     private Double shipping;
     private Double subtotal;

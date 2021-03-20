@@ -5,6 +5,7 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Iterator;
@@ -16,7 +17,11 @@ import static com.aneirine.service.utils.Constants.SUCCESS_URL;
 @RequiredArgsConstructor
 public class PaypalController {
 
+    @Value("${service.port}")
+    private long port;
+
     private final PaypalService paypalService;
+
 
     @GetMapping
     public String home() {
@@ -25,6 +30,10 @@ public class PaypalController {
 
     @PostMapping("/pay")
     public String pay(@RequestBody OrderData data) {
+        String cancelUrl = "http://localhost:" + port + "/" + CANCEL_URL;
+        String successUrl = "http://localhost:" + port + "/" + SUCCESS_URL;
+        System.out.println(cancelUrl);
+        System.out.println(successUrl);
         try {
             Payment createdPayment = paypalService.createPayment(data);
 
