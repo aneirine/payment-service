@@ -13,6 +13,7 @@ import static com.aneirine.service.utils.Constants.CANCEL_URL;
 import static com.aneirine.service.utils.Constants.SUCCESS_URL;
 
 @RestController
+@RequestMapping("/payment")
 @RequiredArgsConstructor
 public class PaypalController {
 
