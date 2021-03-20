@@ -10,13 +10,14 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.aneirine.service.utils.Constants.*;
+
 @Service
 @RequiredArgsConstructor
 public class PaypalService {
 
     private final APIContext apiContext;
-    public static final String SUCCESS_URL = "pay/success";
-    public static final String CANCEL_URL = "pay/cancel";
+
 
     public Payment createPayment(OrderData data) throws PayPalRESTException {
         Payer payer = new Payer();
