@@ -13,7 +13,6 @@ import static com.aneirine.service.utils.Constants.CANCEL_URL;
 import static com.aneirine.service.utils.Constants.SUCCESS_URL;
 
 @RestController
-@RequestMapping("/payment")
 @RequiredArgsConstructor
 public class PaypalController {
 
@@ -24,7 +23,7 @@ public class PaypalController {
         return "Home";
     }
 
-    @PostMapping
+    @PostMapping("/pay")
     public String pay(@RequestBody OrderData data) {
         try {
             Payment createdPayment = paypalService.createPayment(data);
