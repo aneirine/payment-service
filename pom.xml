@@ -39,12 +39,13 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.paypal.sdk/paypal-android-sdk -->
+        <!-- https://mvnrepository.com/artifact/com.paypal.sdk/rest-api-sdk -->
         <dependency>
             <groupId>com.paypal.sdk</groupId>
-            <artifactId>paypal-android-sdk</artifactId>
-            <version>2.16.0</version>
+            <artifactId>rest-api-sdk</artifactId>
+            <version>1.14.0</version>
         </dependency>
+
 
 
     </dependencies>
