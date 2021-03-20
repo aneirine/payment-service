@@ -1,6 +1,8 @@
 package com.aneirine.service.config;
 
+import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.OAuthTokenCredential;
+import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,5 +32,11 @@ public class PaypalConfiguration {
     @Bean
     public OAuthTokenCredential tokenCredential(){
         return new OAuthTokenCredential(clientId, clientSecret);
+    }
+
+    @Bean
+    public APIContext apiContext() throws PayPalRESTException {
+        APIContext context = new APIContext(clientId, clientSecret, mode);
+        return context;
     }
 }
