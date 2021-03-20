@@ -1,8 +1,10 @@
 package com.aneirine.service.models;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class OrderData {
 
     private String currency;
@@ -12,6 +14,8 @@ public class OrderData {
     private Double shipping;
     private Double subtotal;
     private Double tax;
+    private String cancelUrl;
+    private String successUrl;
 
 
 }

@@ -17,15 +17,14 @@ import static com.aneirine.service.utils.Constants.SUCCESS_URL;
 @RequiredArgsConstructor
 public class PaypalController {
 
-    @Value("${service.port}")
+    @Value("${server.port}")
     private long port;
 
     private final PaypalService paypalService;
 
-
     @GetMapping
-    public String home() {
-        return "home";
+    public String home(){
+        return "Home";
     }
 
     @PostMapping("/pay")
@@ -34,6 +33,8 @@ public class PaypalController {
         String successUrl = "http://localhost:" + port + "/" + SUCCESS_URL;
         System.out.println(cancelUrl);
         System.out.println(successUrl);
+        data.setCancelUrl(cancelUrl);
+        data.setSuccessUrl(successUrl);
         try {
             Payment createdPayment = paypalService.createPayment(data);
 

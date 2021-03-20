@@ -7,10 +7,10 @@ import com.paypal.base.rest.PayPalRESTException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.aneirine.service.utils.Constants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +25,9 @@ public class PaypalService {
 
         // Set redirect URLs
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl(CANCEL_URL);
-        redirectUrls.setReturnUrl(SUCCESS_URL);
+        redirectUrls.setCancelUrl(data.getCancelUrl());
+        redirectUrls.setReturnUrl(data.getSuccessUrl());
 
-        // Set payment details
         Details details = new Details();
         details.setShipping(String.valueOf(data.getShipping()));
         details.setSubtotal(String.valueOf(data.getSubtotal()));
@@ -39,7 +38,9 @@ public class PaypalService {
         amount.setCurrency("USD");
         // Total must be equal to sum of shipping, tax and subtotal.
         Double total = data.getShipping() + data.getTax() + data.getSubtotal();
-        amount.setTotal(String.valueOf(total));
+        total = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        String totalStr = String.valueOf(total);
+        amount.setTotal(totalStr);
         amount.setDetails(details);
 
         // Transaction information
@@ -52,7 +53,7 @@ public class PaypalService {
 
         // Add payment details
         Payment payment = new Payment();
-        payment.setIntent(data.getIntent());
+        payment.setIntent(data.getIntent().toString().toLowerCase());
         payment.setPayer(payer);
         payment.setRedirectUrls(redirectUrls);
         payment.setTransactions(transactions);
