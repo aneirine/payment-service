@@ -20,7 +20,7 @@ public class PaypalController {
 
     @GetMapping
     public String home() {
-        return "Home";
+        return "home";
     }
 
     @PostMapping("/pay")
