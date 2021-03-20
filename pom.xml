@@ -38,6 +38,15 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.paypal.sdk/paypal-android-sdk -->
+        <dependency>
+            <groupId>com.paypal.sdk</groupId>
+            <artifactId>paypal-android-sdk</artifactId>
+            <version>2.16.0</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
