@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,10 +25,7 @@ public class Payer {
     private String paypalId;
     private String countryCode;
 
-    @ManyToOne
-    private Payer payer;
+    @OneToMany
+    private List<Payment> payments;
 
-    private String cart;
-    private String currency;
-    private double total;
 }

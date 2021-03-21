@@ -20,6 +20,11 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @ManyToOne
+    private Payer payer;
     private String cart;
+    private String currency;
+    private double total;
+
 
 }
