@@ -1,20 +1,18 @@
 package com.aneirine.service.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "payers")
-public class Payer {
+public class PayerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -26,6 +24,6 @@ public class Payer {
     private String countryCode;
 
     @OneToMany
-    private List<Payment> payments;
+    private List<PaymentEntity> payments;
 
 }
