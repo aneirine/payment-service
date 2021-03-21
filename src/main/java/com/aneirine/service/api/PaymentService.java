@@ -100,33 +100,35 @@ public class PaymentService {
     }
 
     private void createPaymentEntity(String payerId, Payment payment) {
-        Amount amount = payment.getTransactions().get(0).getAmount();
-        Payer payer = payment.getPayer();
-        PayerEntity payerEntity = payerRepository.findByPaypalId(payerId);
-        System.out.println("PAYER ID " + payerId);
-        if (payerEntity == null) {
-            PayerInfo payerInfo = payer.getPayerInfo();
-            payerEntity = PayerEntity.builder()
-                    .countryCode(payerInfo.getCountryCode())
-                    .email(payerInfo.getEmail())
-                    .firstName(payerInfo.getFirstName())
-                    .lastName(payerInfo.getLastName())
-                    .paypalId(payerId)
-                    .payments(new ArrayList<>())
+        for (Transaction temp : payment.getTransactions()) {
+            Amount amount = temp.getAmount();
+            Payer payer = payment.getPayer();
+            PayerEntity payerEntity = payerRepository.findByPaypalId(payerId);
+            System.out.println("PAYER ID " + payerId);
+            if (payerEntity == null) {
+                PayerInfo payerInfo = payer.getPayerInfo();
+                payerEntity = PayerEntity.builder()
+                        .countryCode(payerInfo.getCountryCode())
+                        .email(payerInfo.getEmail())
+                        .firstName(payerInfo.getFirstName())
+                        .lastName(payerInfo.getLastName())
+                        .paypalId(payerId)
+                        .payments(new ArrayList<>())
+                        .build();
+                payerRepository.save(payerEntity);
+            }
+
+            PaymentEntity paymentEntity = PaymentEntity.builder()
+                    .cart(payment.getCart())
+                    .currency(amount.getCurrency())
+                    .payer(payerEntity)
+                    .total(Double.valueOf(amount.getTotal()))
                     .build();
+
+            paymentRepository.save(paymentEntity);
+            payerEntity.getPayments().add(paymentEntity);
             payerRepository.save(payerEntity);
         }
-
-        PaymentEntity paymentEntity = PaymentEntity.builder()
-                .cart(payment.getCart())
-                .currency(amount.getCurrency())
-                .payer(payerEntity)
-                .total(Double.valueOf(amount.getTotal()))
-                .build();
-
-        paymentRepository.save(paymentEntity);
-        payerEntity.getPayments().add(paymentEntity);
-        payerRepository.save(payerEntity);
     }
 
     public String handlePayment(OrderData data) {
