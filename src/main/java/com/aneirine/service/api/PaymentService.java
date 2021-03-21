@@ -1,6 +1,8 @@
 package com.aneirine.service.api;
 
 import com.aneirine.service.api.models.OrderData;
+import com.aneirine.service.entities.PayerEntity;
+import com.aneirine.service.entities.PaymentEntity;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +25,8 @@ import static com.aneirine.service.utils.Constants.SUCCESS_URL;
 public class PaymentService {
 
     private final APIContext apiContext;
+    private final PaymentRepository paymentRepository;
+    private final PayerRepository payerRepository;
 
     @Value("${server.port}")
     private long port;
@@ -85,12 +90,43 @@ public class PaymentService {
             System.out.println(payment.toJSON());
 
             if (payment.getState().equals("approved")) {
+                createPaymentEntity(payerId, payment);
                 return "success";
             }
         } catch (PayPalRESTException e) {
             System.out.println(e.getMessage());
         }
         return "redirect:/";
+    }
+
+    private void createPaymentEntity(String payerId, Payment payment) {
+        Amount amount = payment.getTransactions().get(0).getAmount();
+        Payer payer = payment.getPayer();
+        PayerEntity payerEntity = payerRepository.findByPaypalId(payerId);
+        System.out.println("PAYER ID " + payerId);
+        if (payerEntity == null) {
+            PayerInfo payerInfo = payer.getPayerInfo();
+            payerEntity = PayerEntity.builder()
+                    .countryCode(payerInfo.getCountryCode())
+                    .email(payerInfo.getEmail())
+                    .firstName(payerInfo.getFirstName())
+                    .lastName(payerInfo.getLastName())
+                    .paypalId(payerId)
+                    .payments(new ArrayList<>())
+                    .build();
+            payerRepository.save(payerEntity);
+        }
+
+        PaymentEntity paymentEntity = PaymentEntity.builder()
+                .cart(payment.getCart())
+                .currency(amount.getCurrency())
+                .payer(payerEntity)
+                .total(Double.valueOf(amount.getTotal()))
+                .build();
+
+        paymentRepository.save(paymentEntity);
+        payerEntity.getPayments().add(paymentEntity);
+        payerRepository.save(payerEntity);
     }
 
     public String handlePayment(OrderData data) {
