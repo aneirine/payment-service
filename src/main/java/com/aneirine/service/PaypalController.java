@@ -62,6 +62,7 @@ public class PaypalController {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             System.out.println(payment.toJSON());
+
             if (payment.getState().equals("approved")) {
                 return "success";
             }
