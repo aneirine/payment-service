@@ -1,4 +1,4 @@
-package com.aneirine.service.models;
+package com.aneirine.service.api.models;
 
 import lombok.Getter;
 import lombok.Setter;
